@@ -20,7 +20,7 @@ data BoundInterval a = BoundInterval
 
 boundsInterval :: Ord a => a -> a -> Either (IntervalError a b) (BoundInterval a)
 boundsInterval start end =
-  if   (start <= end)
+  if   start <= end
   then Right $ BoundInterval  start end
   else Left  $ EndBeforeStart start end
 
