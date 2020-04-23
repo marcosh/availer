@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 355c2bb692e589e85264a5c61515d83b277c5ce2771ada73a19b3f24c27f5e4e
+-- hash: 5c83aa7f108ea44375f53764b407dfb3cfbf8656a1b24499c4ef11638a3d8742
 
 name:           availer
 version:        0.1.0.0
@@ -22,9 +22,9 @@ extra-source-files:
 library
   exposed-modules:
       Availer.Action
-      Availer.BoundInterval
+      Availer.Boundary
+      Availer.Interval
       Availer.IntervalError
-      Availer.LengthInterval
       Availer.Positive
   other-modules:
       Paths_availer
@@ -33,4 +33,5 @@ library
   build-depends:
       base >=4.7 && <5
     , either
+    , lens
   default-language: Haskell2010

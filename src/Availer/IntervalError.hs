@@ -1,5 +1,7 @@
 module Availer.IntervalError where
 
+import Availer.Boundary
+
 data IntervalError a b
-  = EndBeforeStart a a
+  = EndBeforeStart (Boundary a) (Boundary a)
   | NegativeLength b
