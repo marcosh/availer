@@ -2,7 +2,7 @@ module Availer.BoundInterval
   ( BoundInterval
   , boundsInterval
   , lengthInterval
-  , intersection
+  , meet
   ) where
 
 import Prelude hiding (length)
@@ -30,8 +30,8 @@ lengthInterval start length =
   then Right $ BoundInterval start (add start length)
   else Left  $ NegativeLength length
 
-intersection :: Ord a => BoundInterval a -> BoundInterval a -> Maybe (BoundInterval a)
-intersection (BoundInterval start1 end1) (BoundInterval start2 end2) =
+meet :: Ord a => BoundInterval a -> BoundInterval a -> Maybe (BoundInterval a)
+meet (BoundInterval start1 end1) (BoundInterval start2 end2) =
   let
     newStart = max start1 start2
     newEnd   = min end1   end2
