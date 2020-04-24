@@ -32,3 +32,15 @@ compareEnd :: Ord a => Boundary a -> Boundary a -> Ordering
 compareEnd (Boundary a1 Included) (Boundary a2 Excluded) = compare a1 a2 <> GT
 compareEnd (Boundary a1 Excluded) (Boundary a2 Included) = compare a1 a2 <> LT
 compareEnd (Boundary a1 _       ) (Boundary a2 _       ) = compare a1 a2
+
+-- | compare a starting boundary with an ending boundary
+compareStartEnd :: Ord a => Boundary a -> Boundary a -> Ordering
+compareStartEnd (Boundary a1 Included) (Boundary a2 Excluded) = compare a1 a2 <> GT
+compareStartEnd (Boundary a1 Excluded) (Boundary a2 Included) = compare a1 a2 <> GT
+compareStartEnd (Boundary a1 _       ) (Boundary a2 _       ) = compare a1 a2
+
+-- | compare an ending boundary with a starting boundary
+compareEndStart :: Ord a => Boundary a -> Boundary a -> Ordering
+compareEndStart (Boundary a1 Included) (Boundary a2 Excluded) = compare a1 a2 <> LT
+compareEndStart (Boundary a1 Excluded) (Boundary a2 Included) = compare a1 a2 <> LT
+compareEndStart (Boundary a1 _       ) (Boundary a2 _       ) = compare a1 a2
