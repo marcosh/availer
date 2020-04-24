@@ -66,7 +66,7 @@ spec =
       \(a1 :: Int) a2 -> compareStartEnd (Boundary a1 Included) (Boundary a2 Included) == compare a1 a2
 
     it "compares a starting and an ending excluded boundaries looking at their values" $ property $
-      \(a1 :: Int) a2 -> compareStartEnd (Boundary a1 Excluded) (Boundary a2 Excluded) == compare a1 a2
+      \(a1 :: Int) a2 -> compareStartEnd (Boundary a1 Excluded) (Boundary a2 Excluded) == compare a1 a2 <> GT
 
     it "compares an included starting and an excluded ending boundary looking at their values and returning GT if they are equal" $ property $
       \(a1 :: Int) a2 -> compareStartEnd (Boundary a1 Included) (Boundary a2 Excluded) == compare a1 a2 <> GT
@@ -86,7 +86,7 @@ spec =
       \(a1 :: Int) a2 -> compareEndStart (Boundary a1 Included) (Boundary a2 Included) == compare a1 a2
 
     it "compares an ending and a starting excluded boundaries looking at their values" $ property $
-      \(a1 :: Int) a2 -> compareEndStart (Boundary a1 Excluded) (Boundary a2 Excluded) == compare a1 a2
+      \(a1 :: Int) a2 -> compareEndStart (Boundary a1 Excluded) (Boundary a2 Excluded) == compare a1 a2 <> LT
 
     it "compares an included ending and an excluded starting boundary looking at their values and returning LT if they are equal" $ property $
       \(a1 :: Int) a2 -> compareEndStart (Boundary a1 Included) (Boundary a2 Excluded) == compare a1 a2 <> LT
