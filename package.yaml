@@ -1,7 +1,7 @@
 name:                availer
 version:             0.1.0.0
-#synopsis:
-#description:
+synopsis:            a Haskell library to manage intervals
+description:         a Haskell library to manage intervals
 homepage:            https://github.com/marcosh/availer#readme
 license:             BSD3
 author:              Marco Perone
