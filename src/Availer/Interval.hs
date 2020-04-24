@@ -2,13 +2,13 @@ module Availer.Interval
   ( Interval
   , boundsInterval
   , lengthInterval
-  -- , meet
+  , meet
   ) where
 
 import Prelude hiding (length)
 
 -- either
--- import Data.Either.Combinators
+import Data.Either.Combinators
 
 -- lens
 import Control.Lens (view)
@@ -35,10 +35,10 @@ lengthInterval start length isEndIncluded =
   then Right $ Interval start (Boundary (add (view boundaryValue start) length) isEndIncluded)
   else Left  $ NegativeLength length
 
--- meet :: Ord a => Interval a -> Interval a -> Maybe (Interval a)
--- meet (Interval start1 end1) (Interval start2 end2) =
---   let
---     newStart = max start1 start2
---     newEnd   = min end1   end2
---   in
---     rightToMaybe $ boundsInterval newStart newEnd
+meet :: Ord a => Interval a -> Interval a -> Maybe (Interval a)
+meet (Interval start1 end1) (Interval start2 end2) =
+  let
+    newStart = max start1 start2
+    newEnd   = min end1   end2
+  in
+    rightToMaybe $ boundsInterval newStart newEnd
