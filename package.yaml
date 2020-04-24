@@ -18,3 +18,12 @@ dependencies:
 
 library:
   source-dirs:       src
+
+tests:
+  availer-test:
+    main:            Spec.hs
+    source-dirs:     test
+    dependencies:
+      - availer
+      - hspec
+      - QuickCheck

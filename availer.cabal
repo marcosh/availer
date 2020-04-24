@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 5c83aa7f108ea44375f53764b407dfb3cfbf8656a1b24499c4ef11638a3d8742
+-- hash: 458f81c9a6672d7d714816fc930237fce3ae7d57fe4e1982e8572cefb857c9c1
 
 name:           availer
 version:        0.1.0.0
@@ -33,5 +33,24 @@ library
   build-depends:
       base >=4.7 && <5
     , either
+    , lens
+  default-language: Haskell2010
+
+test-suite availer-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      AvailerSpec.Arbitrary.Boundary
+      AvailerSpec.BoundarySpec
+      AvailerSpec.IntervalSpec
+      Paths_availer
+  hs-source-dirs:
+      test
+  build-depends:
+      QuickCheck
+    , availer
+    , base >=4.7 && <5
+    , either
+    , hspec
     , lens
   default-language: Haskell2010
