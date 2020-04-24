@@ -1,57 +1,40 @@
+{-# LANGUAGE TemplateHaskell #-}
+
 module Availer.Interval
   ( Interval
+  , empty
   , boundsInterval
-  , lengthInterval
-  , meet
-  , join
+  , isEmpty
   ) where
 
 import Prelude hiding (length)
 
--- either
-import Data.Either.Combinators
+-- base
+import Data.Maybe (isJust)
 
 -- lens
-import Control.Lens (view)
+import Control.Lens (makePrisms, preview)
 
-import Availer.Action
 import Availer.Boundary
-import Availer.IntervalError
-import Availer.Positive
 
-data Interval a = Interval
-  { _start :: Boundary a
-  , _end   :: Boundary a
-  }
+-- | an interval could either be `Empty` or be delimited by a `start` and an `end` boundary.
+data Interval a
+  = Empty
+  | Interval { _start :: Boundary a, _end   :: Boundary a }
+  deriving (Eq, Show)
 
-boundsInterval :: Ord a => Boundary a -> Boundary a -> Either (IntervalError a b) (Interval a)
-boundsInterval start end =
-  if   start <= end
-  then Right $ Interval  start end
-  else Left  $ EndBeforeStart start end
+makePrisms ''Interval
 
-lengthInterval :: (Action a b, Positive b) => Boundary a -> b -> IsIncluded -> Either (IntervalError a b) (Interval a)
-lengthInterval start length isEndIncluded =
-  if   isPositive length
-  then Right $ Interval start (Boundary (add (view boundaryValue start) length) isEndIncluded)
-  else Left  $ NegativeLength length
+empty :: Interval a
+empty = Empty
 
-meet :: Ord a => Interval a -> Interval a -> Maybe (Interval a)
-meet (Interval start1 end1) (Interval start2 end2) =
-  let
-    newStart = max start1 start2
-    newEnd   = min end1   end2
-  in
-    rightToMaybe $ boundsInterval newStart newEnd
+-- | constructs an interval from a starting and an ending bound. If the ending bound is smaller than the string one, we
+-- | return the empty interval
+boundsInterval :: Ord a => Boundary a -> Boundary a -> Interval a
+boundsInterval startBoundary endBoundary =
+  if   compareExclusive startBoundary endBoundary >= EQ
+  then Interval startBoundary endBoundary
+  else Empty
 
-join :: Ord a => Interval a -> Interval a -> [Interval a]
-join (Interval start1 end1) (Interval start2 end2) =
-  let
-    minStart = min start1 start2
-    maxStart = max start1 start2
-    minEnd   = min end1 end2
-    maxEnd   = max end1 end2
-  in
-    if maxStart <= minEnd
-    then [Interval minStart maxEnd]
-    else [Interval minStart minEnd, Interval maxStart maxEnd]
+isEmpty :: Interval a -> Bool
+isEmpty interval = isJust $ preview _Empty interval
