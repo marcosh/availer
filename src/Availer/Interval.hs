@@ -3,6 +3,7 @@ module Availer.Interval
   , boundsInterval
   , lengthInterval
   , meet
+  , join
   ) where
 
 import Prelude hiding (length)
@@ -42,3 +43,15 @@ meet (Interval start1 end1) (Interval start2 end2) =
     newEnd   = min end1   end2
   in
     rightToMaybe $ boundsInterval newStart newEnd
+
+join :: Ord a => Interval a -> Interval a -> [Interval a]
+join (Interval start1 end1) (Interval start2 end2) =
+  let
+    minStart = min start1 start2
+    maxStart = max start1 start2
+    minEnd   = min end1 end2
+    maxEnd   = max end1 end2
+  in
+    if maxStart <= minEnd
+    then [Interval minStart maxEnd]
+    else [Interval minStart minEnd, Interval maxStart maxEnd]
