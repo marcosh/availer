@@ -5,6 +5,8 @@ module Availer.Interval
   , empty
   , boundsInterval
   , isEmpty
+  , start
+  , end
   ) where
 
 import Prelude hiding (length)
@@ -13,7 +15,7 @@ import Prelude hiding (length)
 import Data.Maybe (isJust)
 
 -- lens
-import Control.Lens (makePrisms, preview)
+import Control.Lens hiding (Empty, _Empty)
 
 import Availer.Boundary
 
@@ -32,9 +34,15 @@ empty = Empty
 -- | return the empty interval
 boundsInterval :: Ord a => Boundary a -> Boundary a -> Interval a
 boundsInterval startBoundary endBoundary =
-  if   compareExclusive startBoundary endBoundary >= EQ
+  if   compareInclusive startBoundary endBoundary <= EQ
   then Interval startBoundary endBoundary
   else Empty
 
 isEmpty :: Interval a -> Bool
-isEmpty interval = isJust $ preview _Empty interval
+isEmpty = isJust . preview _Empty
+
+start :: Traversal' (Interval a) (Boundary a)
+start = _Interval . _1
+
+end :: Traversal' (Interval a) (Boundary a)
+end = _Interval . _2
