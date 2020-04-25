@@ -7,6 +7,7 @@ module Availer.Interval
   , isEmpty
   , start
   , end
+  , intersection
   ) where
 
 import Prelude hiding (length)
@@ -46,3 +47,15 @@ start = _Interval . _1
 
 end :: Traversal' (Interval a) (Boundary a)
 end = _Interval . _2
+
+intersection :: Ord a => Interval a -> Interval a -> Interval a
+intersection Empty                  _                      = Empty
+intersection _                      Empty                  = Empty
+intersection (Interval start1 end1) (Interval start2 end2) =
+  let
+    maxStart = max start1 start2
+    minEnd   = min end1   end2
+  in
+    if   compareInclusive maxStart minEnd <= EQ
+    then Interval maxStart minEnd
+    else Empty
