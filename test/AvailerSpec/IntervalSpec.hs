@@ -14,20 +14,7 @@ import Test.QuickCheck
 import Availer.Boundary
 import Availer.Interval
 import AvailerSpec.Arbitrary.Boundary()
-
-genOrderedPair :: Gen (Int, Int)
-genOrderedPair = (arbitrary :: Gen (Int, Int)) `suchThat` uncurry (<)
-
-genOrderedBoundaries :: Gen (Boundary Int, Boundary Int)
-genOrderedBoundaries = (\(i1, i2) (inc1, inc2) -> (Boundary i1 inc1, Boundary i2 inc2))
-  <$> genOrderedPair
-  <*> ((,) <$> arbitrary <*> arbitrary)
-
-genNonEmptyInterval :: Gen (Interval Int)
-genNonEmptyInterval = uncurry boundsInterval <$> genOrderedBoundaries
-
-genInterval :: Gen (Interval Int)
-genInterval = oneof [pure empty, genNonEmptyInterval]
+import AvailerSpec.Arbitrary.Interval
 
 spec :: Spec
 spec =
@@ -73,8 +60,8 @@ spec =
             preview start interval == Just startBoundary &&
             preview end   interval == Just endBoundary
 
-    -- describe "intersection" $ do
+    describe "intersection" $ do
 
-      it "Empty intersects _ == Empty" $ property $ forAll genInterval $
-        \interval ->
+      it "Empty intersects _ == Empty" $ property $
+        \(interval :: Interval Int) ->
           isEmpty $ intersection empty interval

@@ -4,10 +4,12 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 458f81c9a6672d7d714816fc930237fce3ae7d57fe4e1982e8572cefb857c9c1
+-- hash: 865629d6ab5a6949de2b79ddf5fe7d435282e69812976b9817dbc26d9b656baf
 
 name:           availer
 version:        0.1.0.0
+synopsis:       a Haskell library to manage intervals
+description:    a Haskell library to manage intervals
 category:       Web
 homepage:       https://github.com/marcosh/availer#readme
 author:         Marco Perone
@@ -26,6 +28,7 @@ library
       Availer.Interval
       Availer.IntervalError
       Availer.Positive
+      Availer.Relation
   other-modules:
       Paths_availer
   hs-source-dirs:
@@ -41,6 +44,7 @@ test-suite availer-test
   main-is: Spec.hs
   other-modules:
       AvailerSpec.Arbitrary.Boundary
+      AvailerSpec.Arbitrary.Interval
       AvailerSpec.BoundarySpec
       AvailerSpec.IntervalSpec
       Paths_availer
