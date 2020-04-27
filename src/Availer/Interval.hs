@@ -35,7 +35,7 @@ empty = Empty
 -- | return the empty interval
 boundsInterval :: Ord a => Boundary a -> Boundary a -> Interval a
 boundsInterval startBoundary endBoundary =
-  if   compareInclusive startBoundary endBoundary <= EQ
+  if   GTBoundary startBoundary <= GTBoundary endBoundary
   then Interval startBoundary endBoundary
   else Empty
 
@@ -56,6 +56,6 @@ intersection (Interval start1 end1) (Interval start2 end2) =
     maxStart = max start1 start2
     minEnd   = min end1   end2
   in
-    if   compareInclusive maxStart minEnd <= EQ
+    if   GTBoundary maxStart <= GTBoundary minEnd
     then Interval maxStart minEnd
     else Empty
