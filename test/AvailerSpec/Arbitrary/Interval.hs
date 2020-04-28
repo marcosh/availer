@@ -22,3 +22,9 @@ genNonEmptyInterval = uncurry boundsInterval <$> genOrderedBoundaries
 
 instance (Arbitrary a, Ord a) => Arbitrary (Interval a) where
   arbitrary = oneof [pure empty, genNonEmptyInterval]
+
+genNonEmptyIntervalPair :: (Arbitrary a, Ord a) =>
+  ((Boundary a, Boundary a, Boundary a, Boundary a) -> Bool) ->  Gen (Interval a, Interval a)
+genNonEmptyIntervalPair boundariesComparer =
+  (\(start1, end1, start2, end2) -> (boundsInterval start1 end1, boundsInterval start2 end2))
+  <$> arbitrary `suchThat` boundariesComparer

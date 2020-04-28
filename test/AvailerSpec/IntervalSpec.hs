@@ -74,3 +74,16 @@ spec =
       it "Empty intersects _ == Empty" $ property $
         \(interval :: Interval Int) ->
           isEmpty $ intersection empty interval
+
+      it "is idempotent" $ property $
+        \(interval1 :: Interval Int) interval2 ->
+          (interval1 `intersection` interval2) `intersection` interval2 == interval1 `intersection` interval2
+
+      it "returns empty for disjoint intervals" $ property $
+        forAll (genNonEmptyIntervalPair (\(_, end1, start2, _) -> LTBoundary end1 < LTBoundary start2)) $
+          \(interval1 :: Interval Int, interval2) -> interval1 `intersection` interval2 == empty
+
+      it "returns the first interval if it is contained in the second" $ property $
+        forAll (genNonEmptyIntervalPair (\(start1, end1, start2, end2) ->
+          StartBoundary start1 >= StartBoundary start2 && EndBoundary end1 <= EndBoundary end2)) $
+            \(interval1 :: Interval Int, interval2) -> interval1 `intersection` interval2 == interval1
