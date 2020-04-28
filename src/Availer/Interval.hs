@@ -13,6 +13,7 @@ module Availer.Interval
 import Prelude hiding (length)
 
 -- base
+import Data.Coerce (coerce)
 import Data.Maybe (isJust)
 
 -- lens
@@ -53,8 +54,8 @@ intersection Empty                  _                      = Empty
 intersection _                      Empty                  = Empty
 intersection (Interval start1 end1) (Interval start2 end2) =
   let
-    maxStart = max start1 start2
-    minEnd   = min end1   end2
+    maxStart = coerce $ max (StartBoundary start1) (StartBoundary start2)
+    minEnd   = coerce $ min (EndBoundary   end1  ) (EndBoundary   end2  )
   in
     if   GTBoundary maxStart <= GTBoundary minEnd
     then Interval maxStart minEnd

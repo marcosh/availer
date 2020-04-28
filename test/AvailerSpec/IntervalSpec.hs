@@ -62,6 +62,10 @@ spec =
 
     describe "intersection" $ do
 
+      it "is symmetric" $ property $
+        \(interval1 :: Interval Int) interval2 ->
+          intersection interval1 interval2 == intersection interval2 interval1
+
       it "Empty intersects _ == Empty" $ property $
         \(interval :: Interval Int) ->
           isEmpty $ intersection empty interval
