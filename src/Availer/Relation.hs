@@ -59,3 +59,19 @@ relate interval1 interval2 =
       (Left  _, False, False) -> OverlappedBy
       (Right _, True , _    ) -> Before
       (Right _, False, _    ) -> After
+
+invert :: Relation -> Relation
+invert relation = case relation of
+  After        -> Before
+  Before       -> After
+  Contains     -> During
+  During       -> Contains
+  Equal        -> Equal
+  FinishedBy   -> Finishes
+  Finishes     -> FinishedBy
+  JustBefore   -> JustAfter
+  JustAfter    -> JustBefore
+  OverlappedBy -> Overlaps
+  Overlaps     -> OverlappedBy
+  StartedBy    -> Starts
+  Starts       -> StartedBy
