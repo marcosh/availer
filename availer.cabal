@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: e959ecd90b7b3b163d70966a29ccab2691aeb2a02c9b4b23cd4f3eefe9b2cf11
+-- hash: 59b5a28256ca2d1b0c5f6ff3a58c73153a3879a7ae66ceb5d13f60a71549b8ca
 
 name:           availer
 version:        0.1.0.0
@@ -44,8 +44,10 @@ test-suite availer-test
   other-modules:
       AvailerSpec.Arbitrary.Boundary
       AvailerSpec.Arbitrary.Interval
+      AvailerSpec.Arbitrary.Relation
       AvailerSpec.BoundarySpec
       AvailerSpec.IntervalSpec
+      AvailerSpec.RelationSpec
       Paths_availer
   hs-source-dirs:
       test

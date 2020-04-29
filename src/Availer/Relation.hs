@@ -35,6 +35,7 @@ data Relation
   | Overlaps
   -- | union is bigger than both, union is one interval, intersection is not empty, start x > start y (oi)
   | OverlappedBy
+  deriving (Eq, Show)
 
 eqJust :: Eq a => Maybe a -> Maybe a -> Bool
 eqJust (Just a) (Just b) = a == b
