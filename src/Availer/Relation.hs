@@ -3,29 +3,29 @@ module Availer.Relation where
 -- | describes how two intervals `x` and `y` can be related
 -- | see https://en.wikipedia.org/wiki/Allen%27s_interval_algebra
 data Relation
-  -- | empty intersection, union is two intervals, first before second (< in Allen's notation)
-  = Before
-  -- | empty intersection, union is two intervals, second before first (>)
-  | After
-  -- | empty intersection, union is one interval, first just before second (m)
-  | Meets
-  -- | empty intersection, union is one interval, second just before first (mi)
-  | MetBy
-  -- | non-empty intersection, equal to both intervals (=)
-  | Equal
-  -- | non-empty intersection, smaller than both intervals, first starts before second (o)
-  | Overlaps
-  -- | non-empty intersection, smaller that both intervals, second starts before first (oi)
-  | OverlappedBy
-  -- | non-empty intersection, equal to the first but not the second, same start (s)
+  -- | union is equal to both (= in Allen's notation)
+  = Equal
+  -- | union is equal to x but bigger than y, start x = start y, end x != end y (s)
   | Starts
-  -- | non-empty intersection, equal to the first but not the second, same end (f)
+  -- | union is equal to x but bigger than y, start x != start y, end x = end y (f)
   | Finishes
-  -- | non-empty intersection, equal to the first but not the second, different start and end (d)
+  -- | union is equal to x but bigger than y, start x != start y, end x != end y (d)
   | During
-  -- | non-empty intersection, equal to the second but not the first, same start (si)
+  -- | union is bigger than y and equal to y, start x = start y, end x != end y (si)
   | StartedBy
-  -- | non-empty intersection, equal to the second but not the first, same end (fi)
+  -- | union is bigger than x and equal to y, start x != start y, end x = end y (fi)
   | FinishedBy
-  -- | non-empty intersection, equal to the second but not the first, different start and end (di)
+  -- | union is bigger than x and equal to y, start x != start y, end x != end y (di)
   | Contains
+  -- | union is bigger than both, union is two intervals, start x < start y (<)
+  | Before
+  -- | union is bigger than both, union is two intervals, start x > start y (>)
+  | After
+  -- | union is bigger than both, union is one interval, intersection is empty, start x < start y (m)
+  | JustBefore
+  -- | union is bigger than both, union is one interval, intersection is empty, start x < start y (mi)
+  | JustAfter
+  -- | union is bigger than both, union is one interval, intersection is not empty, start x < start y (o)
+  | Overlaps
+  -- | union is bigger than both, union is one interval, intersection is not empty, start x > start y (oi)
+  | OverlappedBy
