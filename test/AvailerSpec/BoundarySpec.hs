@@ -101,3 +101,23 @@ spec =
 
       it "compares an excluded ending and an included starting boundary with equal values returning LT" $ property $
         \(a1 :: Int) -> LTBoundary (Boundary a1 Excluded) < LTBoundary (Boundary a1 Included)
+
+    describe "UnionBoundary" $ do
+
+      it "compares an ending and a starting included boundaries looking at their values" $ property $
+        \(a1 :: Int) a2 -> compare (UnionBoundary (Boundary a1 Included)) (UnionBoundary (Boundary a2 Included)) == compare a1 a2
+
+      it "compares an ending and a starting excluded boundaries looking at their values" $ property $
+        \(a1 :: Int) a2 -> compare (UnionBoundary (Boundary a1 Excluded)) (UnionBoundary (Boundary a2 Excluded)) == compare a1 a2 <> LT
+
+      it "compares an included ending and an excluded starting boundary looking at their values" $ property $
+        \(a1 :: Int) a2 -> compare (UnionBoundary (Boundary a1 Included)) (UnionBoundary (Boundary a2 Excluded)) == compare a1 a2
+
+      it "compares an included ending and an excluded starting boundary with equal values returning EQ" $ property $
+        \(a1 :: Int) -> compare (UnionBoundary (Boundary a1 Included)) (UnionBoundary (Boundary a1 Excluded)) == EQ
+
+      it "compares an excluded ending and an included starting boundary looking at their values" $ property $
+        \(a1 :: Int) a2 -> compare (UnionBoundary (Boundary a1 Excluded)) (UnionBoundary (Boundary a2 Included)) == compare a1 a2
+
+      it "compares an excluded ending and an included starting boundary with equal values returning EQ" $ property $
+        \(a1 :: Int) -> compare (UnionBoundary (Boundary a1 Excluded)) (UnionBoundary (Boundary a1 Included)) == EQ

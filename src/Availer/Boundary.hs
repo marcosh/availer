@@ -52,3 +52,11 @@ newtype LTBoundary a = LTBoundary (Boundary a)
 instance Ord a => Ord (LTBoundary a) where
   compare (LTBoundary (Boundary a1 Included)) (LTBoundary (Boundary a2 Included)) = compare a1 a2
   compare (LTBoundary (Boundary a1 _       )) (LTBoundary (Boundary a2 _       )) = compare a1 a2 <> LT
+
+newtype UnionBoundary a = UnionBoundary (Boundary a)
+  deriving (Eq, Show)
+
+-- | notice how `compare (UnionBoundary (Boundary a Excluded)) (UnionBoundary (Boundary a Excluded))` equals `LT` and not `EQ`
+instance Ord a => Ord (UnionBoundary a) where
+  compare (UnionBoundary (Boundary a1 Excluded)) (UnionBoundary (Boundary a2 Excluded)) = compare a1 a2 <> LT
+  compare (UnionBoundary (Boundary a1 _       )) (UnionBoundary (Boundary a2 _       )) = compare a1 a2
