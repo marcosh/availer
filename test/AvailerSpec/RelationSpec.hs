@@ -8,6 +8,7 @@ import Test.Hspec
 -- Quickcheck
 import Test.QuickCheck
 
+import Availer.Boundary
 import Availer.Interval
 import Availer.Relation
 import AvailerSpec.Arbitrary.Interval
@@ -25,6 +26,29 @@ spec =
       it "detects that Empty is contained in any non-empty interval" $ property $
         forAll genNonEmptyInterval $
           \(interval :: Interval Int) -> relate interval empty == Contains
+
+      it "detects that one interval is before another" $ property $
+        forAll (genNonEmptyIntervalPair (\(start1, end1, start2, end2) ->
+          start1 < end1 && GTBoundary end1 < GTBoundary start2 && start2 < end2)) $
+            \(interval1 :: Interval Int, interval2) -> relate interval1 interval2 == Before
+
+      it "detects that two open intervals with a common boundary are one before the other" $
+        forAll (arbitrary `suchThat` \(boundary1, boundary2, i) ->
+          boundary1 < Boundary i Included && Boundary i Included < boundary2) $
+            \(boundary1 :: Boundary Int, boundary2, i) ->
+              relate (boundsInterval boundary1 (Boundary i Excluded)) (boundsInterval (Boundary i Excluded) boundary2) == Before
+
+      it "detects that one right-closed interval is just before another" $ property $
+        forAll (arbitrary `suchThat` \(boundary1, boundary2, i) ->
+          boundary1 < Boundary i Included && Boundary i Included < boundary2) $
+            \(boundary1 :: Boundary Int, boundary2, i) ->
+              relate (boundsInterval boundary1 (Boundary i Included)) (boundsInterval (Boundary i Excluded) boundary2) == JustBefore
+
+      it "detects that one right-open interval is just before another" $ property $
+        forAll (arbitrary `suchThat` \(boundary1, boundary2, i) ->
+          boundary1 < Boundary i Included && Boundary i Included < boundary2) $
+            \(boundary1 :: Boundary Int, boundary2, i) ->
+              relate (boundsInterval boundary1 (Boundary i Excluded)) (boundsInterval (Boundary i Included) boundary2) == JustBefore
 
     describe "invert" $ do
 
