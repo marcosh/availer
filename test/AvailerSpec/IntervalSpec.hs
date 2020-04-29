@@ -114,3 +114,7 @@ spec =
         forAll (genNonEmptyIntervalPair (\(start1, end1, start2, end2) ->
           StartBoundary start1 >= StartBoundary start2 && EndBoundary end1 <= EndBoundary end2)) $
             \(interval1 :: Interval Int, interval2) -> interval1 `union` interval2 == Left interval2
+
+    it "orders in the same way with respect to union and intersection" $ property $
+      \(interval1 :: Interval Int, interval2) ->
+        (interval1 `union` interval2 == Left interval2) == (interval1 `intersection` interval2 == interval1)
