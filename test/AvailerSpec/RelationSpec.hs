@@ -50,6 +50,26 @@ spec =
             \(boundary1 :: Boundary Int, boundary2, i) ->
               relate (boundsInterval boundary1 (Boundary i Excluded)) (boundsInterval (Boundary i Included) boundary2) == JustBefore
 
+      it "detects that two intervals overlap" $ property $
+        forAll (genNonEmptyIntervalPair (\(start1, end1, start2, end2) ->
+          start1 < start2 && start2 < end1 && end1 < end2)) $
+            \(interval1 :: Interval Int, interval2) -> relate interval1 interval2 == Overlaps
+
+      it "detects that one interval starts another" $ property $
+        forAll (genNonEmptyIntervalPair (\(start1, end1, start2, end2) ->
+          start1 == start2 && start1 < end1 && end1 < end2)) $
+            \(interval1 :: Interval Int, interval2) -> relate interval1 interval2 == Starts
+
+      it "detects that one interval finishes another" $ property $
+        forAll (genNonEmptyIntervalPair (\(start1, end1, start2, end2) ->
+          start2 < start1 && start1 < end1 && end1 == end2)) $
+            \(interval1 :: Interval Int, interval2) -> relate interval1 interval2 == Finishes
+
+      it "detects that one interval contains another" $ property $
+        forAll (genNonEmptyIntervalPair (\(start1, end1, start2, end2) ->
+          start1 < start2 && start2 < end2 && end2 < end1)) $
+            \(interval1 :: Interval Int, interval2) -> relate interval1 interval2 == Contains
+
     describe "invert" $ do
 
       it "is an involution" $ property $
