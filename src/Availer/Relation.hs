@@ -1,5 +1,11 @@
 module Availer.Relation where
 
+-- lens
+import Control.Lens
+
+import Availer.Boundary
+import Availer.Interval
+
 -- | describes how two intervals `x` and `y` can be related
 -- | see https://en.wikipedia.org/wiki/Allen%27s_interval_algebra
 data Relation
@@ -29,3 +35,27 @@ data Relation
   | Overlaps
   -- | union is bigger than both, union is one interval, intersection is not empty, start x > start y (oi)
   | OverlappedBy
+
+eqJust :: Eq a => Maybe a -> Maybe a -> Bool
+eqJust (Just a) (Just b) = a == b
+eqJust _        _        = False
+
+relate :: Ord a => Interval a -> Interval a -> Relation
+relate interval1 interval2 =
+  case (interval1 `intersection` interval2 == interval1, interval1 `intersection` interval2 == interval2) of
+    (True , True ) -> Equal
+    (True , False) | eqJust (preview start interval1) (preview start interval2) -> Starts
+                   | eqJust (preview end   interval1) (preview end   interval2) -> Finishes
+                   | otherwise                                                  -> During
+    (False, True ) | eqJust (preview start interval1) (preview start interval2) -> StartedBy
+                   | eqJust (preview end   interval1) (preview end   interval2) -> FinishedBy
+                   | otherwise                                                  -> Contains
+    (False, False) -> case ( interval1 `union` interval2
+                           , (StartBoundary <$> (preview start interval1)) < (StartBoundary <$> (preview start interval2))
+                           , isEmpty (interval1 `intersection` interval2)) of
+      (Left  _, True , True ) -> JustBefore
+      (Left  _, True , False) -> Overlaps
+      (Left  _, False, True ) -> JustAfter
+      (Left  _, False, False) -> OverlappedBy
+      (Right _, True , _    ) -> Before
+      (Right _, False, _    ) -> After
