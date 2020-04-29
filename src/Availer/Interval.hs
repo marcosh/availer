@@ -8,6 +8,7 @@ module Availer.Interval
   , start
   , end
   , intersection
+  , union
   ) where
 
 import Prelude hiding (length)
@@ -60,3 +61,17 @@ intersection (Interval start1 end1) (Interval start2 end2) =
     if   GTBoundary maxStart <= GTBoundary minEnd
     then Interval maxStart minEnd
     else Empty
+
+union :: Ord a => Interval a -> Interval a -> Either (Interval a) (Interval a, Interval a)
+union Empty                  interval               = Left interval
+union interval               Empty                  = Left interval
+union (Interval start1 end1) (Interval start2 end2) =
+  let
+    minStart = coerce $ min (StartBoundary start1) (StartBoundary start2)
+    maxStart = coerce $ max (StartBoundary start1) (StartBoundary start2)
+    minEnd   = coerce $ min (EndBoundary   end1  ) (EndBoundary   end2  )
+    maxEnd   = coerce $ max (EndBoundary   end1  ) (EndBoundary   end2  )
+  in
+    if UnionBoundary minEnd < UnionBoundary maxStart
+    then Right (boundsInterval minStart minEnd, boundsInterval maxStart maxEnd)
+    else Left (boundsInterval minStart maxEnd)

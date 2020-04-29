@@ -2,6 +2,9 @@
 
 module AvailerSpec.IntervalSpec where
 
+-- base
+import Data.Either (isLeft)
+
 -- hspec
 import Test.Hspec
 
@@ -87,3 +90,27 @@ spec =
         forAll (genNonEmptyIntervalPair (\(start1, end1, start2, end2) ->
           StartBoundary start1 >= StartBoundary start2 && EndBoundary end1 <= EndBoundary end2)) $
             \(interval1 :: Interval Int, interval2) -> interval1 `intersection` interval2 == interval1
+
+    describe "union" $ do
+
+      it "is symmetric" $ property $
+        \(interval1 :: Interval Int) interval2 ->
+          union interval1 interval2 == union interval2 interval1
+
+      it "Empty union _ == _" $ property $
+        \(interval :: Interval Int) ->
+          union empty interval == Left interval
+
+      it "returns the two intervals for distant non-empty intervals" $ property $
+        forAll (genNonEmptyIntervalPair (\(_, end1, start2, _) -> UnionBoundary end1 < UnionBoundary start2)
+          `suchThat` (\(interval1, interval2) -> not (isEmpty interval1) && not (isEmpty interval2))) $
+            \(interval1 :: Interval Int, interval2) -> interval1 `union` interval2 == Right (interval1, interval2)
+
+      it "returns a single interval if the two intervals are adjacent" $ property $
+        forAll (genNonEmptyIntervalPair (\(_, end1, start2, _) -> compare (UnionBoundary end1) (UnionBoundary start2) == EQ)) $
+          \(interval1 :: Interval Int, interval2) -> isLeft $ interval1 `union` interval2
+
+      it "returns the second interval if the first is contained in the second" $ property $
+        forAll (genNonEmptyIntervalPair (\(start1, end1, start2, end2) ->
+          StartBoundary start1 >= StartBoundary start2 && EndBoundary end1 <= EndBoundary end2)) $
+            \(interval1 :: Interval Int, interval2) -> interval1 `union` interval2 == Left interval2
