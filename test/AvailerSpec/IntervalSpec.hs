@@ -23,6 +23,9 @@ spec :: Spec
 spec =
   describe "Interval" $ do
 
+    it "is either empty or it satisfies LTBoundary _start <= LTBoundary _end" $ property $
+      \(interval :: Interval Int) -> evalInterval True (\iStart iEnd -> LTBoundary iStart <= LTBoundary iEnd) interval
+
     describe "empty" $
 
       it "creates an emtpy interval" $
