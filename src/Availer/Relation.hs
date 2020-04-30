@@ -57,7 +57,7 @@ relate interval1 interval2 =
                    | eqJust (preview end   interval1) (preview end   interval2) -> FinishedBy
                    | otherwise                                                  -> Contains
     (False, False) -> case ( interval1 `union` interval2
-                           , (StartBoundary <$> (preview start interval1)) < (StartBoundary <$> (preview start interval2))
+                           , (StartBoundary <$> preview start interval1) < (StartBoundary <$> preview start interval2)
                            , isEmpty (interval1 `intersection` interval2)) of
       (Left  _, True , True ) -> JustBefore
       (Left  _, True , False) -> Overlaps
