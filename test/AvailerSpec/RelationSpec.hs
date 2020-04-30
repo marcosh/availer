@@ -70,6 +70,36 @@ spec =
           start1 < start2 && start2 < end2 && end2 < end1)) $
             \(interval1 :: Interval Int, interval2) -> relate interval1 interval2 == Contains
 
+      it "detects two singletons are one before the other" $ property $
+        forAll (arbitrary `suchThat` uncurry (<)) $
+          \(i1 :: Int, i2) ->
+            relate (boundsInterval (Boundary i1 Included) (Boundary i1 Included)) (boundsInterval (Boundary i2 Included) (Boundary i2 Included))
+              == Before
+
+      it "detects a singleton starts another interval" $ property $
+        forAll (arbitrary `suchThat` uncurry (<)) $
+          \(i1 :: Int, i2) is2Included ->
+            relate (boundsInterval (Boundary i1 Included) (Boundary i1 Included)) (boundsInterval (Boundary i1 Included) (Boundary i2 is2Included))
+              == Starts
+
+      it "detects a singleton is just before another interval" $ property $
+        forAll (arbitrary `suchThat` uncurry (<)) $
+          \(i1 :: Int, i2) is2Included ->
+            relate (boundsInterval (Boundary i1 Included) (Boundary i1 Included)) (boundsInterval (Boundary i1 Excluded) (Boundary i2 is2Included))
+              == JustBefore
+
+      it "detects a singleton finishes another interval" $ property $
+        forAll (arbitrary `suchThat` uncurry (<)) $
+          \(i1 :: Int, i2) is1Included ->
+            relate (boundsInterval (Boundary i2 Included) (Boundary i2 Included)) (boundsInterval (Boundary i1 is1Included) (Boundary i2 Included))
+              == Finishes
+
+      it "detects a singleton is just after another interval" $ property $
+        forAll (arbitrary `suchThat` uncurry (<)) $
+          \(i1 :: Int, i2) is1Included ->
+            relate (boundsInterval (Boundary i2 Included) (Boundary i2 Included)) (boundsInterval (Boundary i1 is1Included) (Boundary i2 Excluded))
+              == JustAfter
+
     describe "invert" $ do
 
       it "is an involution" $ property $
