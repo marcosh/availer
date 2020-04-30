@@ -20,3 +20,11 @@ The library is tested using [hspec](https://hackage.haskell.org/package/hspec) a
 ```
 stack test
 ```
+
+## documentation
+
+You can build the library documentation using
+
+```
+stack haddock
+```
