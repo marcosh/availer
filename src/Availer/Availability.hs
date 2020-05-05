@@ -1,5 +1,6 @@
 module Availer.Availability
   ( Availability
+  , intervals
   , never
   , addInterval
   , isNever
@@ -9,6 +10,7 @@ import Availer.Interval
 
 -- | An ordered collection of disjoint non-empty intervals
 newtype Availability a = Availability {intervals :: [Interval a]}
+  deriving (Eq, Show)
 
 never :: Availability a
 never = Availability []
@@ -27,3 +29,6 @@ addInterval interval (Availability intervalsList) =
 isNever :: Availability a -> Bool
 isNever (Availability []) = True
 isNever _                 = False
+
+instance Ord a => Semigroup (Availability a) where
+  (Availability intervalsList) <> availability = foldr addInterval availability intervalsList
