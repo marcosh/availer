@@ -32,3 +32,6 @@ isNever _                 = False
 
 instance Ord a => Semigroup (Availability a) where
   (Availability intervalsList) <> availability = foldr addInterval availability intervalsList
+
+instance Ord a => Monoid (Availability a) where
+  mempty = never

@@ -88,3 +88,11 @@ spec =
       it "is commutative" $ property $
         \(availability1 :: Availability Int) availability2 ->
           availability1 <> availability2 == availability2 <> availability1
+
+    describe "monoid" $ do
+
+      it "has a right identity" $ property $
+        \(availability :: Availability Int) -> availability <> mempty == availability
+
+      it "has a left identity" $ property $
+        \(availability :: Availability Int) -> mempty <> availability == availability
