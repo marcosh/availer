@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 59b5a28256ca2d1b0c5f6ff3a58c73153a3879a7ae66ceb5d13f60a71549b8ca
+-- hash: 237664debc86a4fb252bfe0f7acb77cffdd025179e6458497ba377ea74268e4f
 
 name:           availer
 version:        0.1.0.0
@@ -24,6 +24,7 @@ extra-source-files:
 library
   exposed-modules:
       Availer.Action
+      Availer.Availability
       Availer.Boundary
       Availer.Interval
       Availer.Positive

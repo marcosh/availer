@@ -78,7 +78,8 @@ intersection (Interval start1 end1) (Interval start2 end2) =
     else Empty
 
 -- | computes the union of two intervals.
--- The result could be either a single interval or two separate intervals
+-- The result could be either a single interval or two separate intervals.
+-- In the latter case, the first interval of the pair is always smaller than the second
 union :: Ord a => Interval a -> Interval a -> Either (Interval a) (Interval a, Interval a)
 union Empty                  interval               = Left interval
 union interval               Empty                  = Left interval
